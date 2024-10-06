@@ -1,8 +1,10 @@
 <?php 
    session_start();
 
-   include "index.php";
-
+   include("php/config.php");
+   if(!isset($_SESSION['valid'])){
+    header("Location: index.php");
+   }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +12,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style/style.css">
     <title>Home</title>
 </head>
 <body>
     <div class="nav">
         <div class="logo">
-            <p><a href="home.php">Logo</a> </p>
+        <a href="home.php"><img src="Picture/logo_bg.png" id="logoPicture" width="100vw" style="cursor: pointer;"></a>
         </div>
 
         <div class="right-links">
@@ -24,10 +26,12 @@
             <?php 
             
             $id = $_SESSION['id'];
-            $query = mysqli_query($con,"SELECT*FROM users WHERE Id=$id");
+            $query = mysqli_query($conn,"SELECT*FROM users WHERE Id=$id");
 
             while($result = mysqli_fetch_assoc($query)){
                 $res_Uname = $result['Username'];
+                $res_Email = $result['Email'];
+                $res_Age = $result['Age'];
                 $res_id = $result['Id'];
             }
             

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>FullStack</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -19,6 +20,17 @@
                 <option>R&B</option>
             </select>
         </label><br><br>
+        Price:
+        <label for="Price" name="price">
+            <select name="Price">
+                <option>All in One €150,00</option>
+                <option>Sing for the night €80,00</option>
+
+            </select>
+        </label><br><br>
+        Date: <input type="date" name="Date"><br><br>
+        Time: <input type="time" name="Time"><br><br>
+
         <input type="submit" name="submit" value="Submit">
 
     </form>
@@ -38,29 +50,32 @@ require('index.php');
 //     echo "Error creating database" .$conn->error;
 // }
 
-// $sql = "CREATE TABLE MyGuests (
-//     id INT(6) unsigned auto_increment primary key,
-//     bandname varchar(30) not null
-//     bandemail varchar(30) not null
-//     genre varchar(30) not null
-// )";
+$sql = "CREATE TABLE users (
+    id INT unsigned auto_increment primary key,
+    Username varchar(200),
+    Email varchar(200),
+    Age int,
+    Password varchar(200)
+    
+)";
 
-// if($conn->query($sql) == true) {
-//     echo "Table created succesfully";
-// }
-// else {
-//     echo "Table creating database" .$conn->error;
-// }
-if (isset($_POST['naam'])) {
-    $band = $_POST['naam'];
-    $sql = "INSERT INTO MyGuests (bandname) VALUES('$band')";
-    if ($conn->query($sql) == true) {
-        echo "Update created succesfully<br><br>";
-    } else {
-        echo "Update failed to database" . $conn->error;
-    }
-    $result = $conn->query($sql);
-    if ($result) echo "Het is gelukt";
-    else echo 'het is niet gelukt';
+if($conn->query($sql) == true) {
+    echo "Table created succesfully";
 }
+else {
+    echo "Table creating database" .$conn->error;
+}
+// if (isset($_POST['naam']) && isset($_POST['Genre'])) {
+//     $band = $_POST['naam'];
+//     $bandGenre = $_POST['Genre'];
+//     $price = $_POST['Price'];
+//     $Date = $_POST['Date'];
+//     $Time = $_POST['Time'];
+//     $sql = "INSERT INTO MyGuests (bandname, bandGenre, price, date, time ) VALUES('$band', '$bandGenre', '$price', '$Date', '$Time')";
+//     if ($conn->query($sql) == true) {
+//         echo "";
+//     } else {
+//         echo "" . $conn->error;
+//     }
+// }
 ?>
