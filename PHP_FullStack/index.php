@@ -42,9 +42,9 @@
                 }
               }else{
 
-            
+                
             ?>
-            <header>Login</header>
+            
             <form action="" method="post">
                 <div class="field input">
                     <label for="username">Username</label>

@@ -44,15 +44,14 @@ if (!isset($_SESSION['valid'])) {
 
             <?php
             if (isset($_POST['btn_submit'])) {
+                $date = $_POST['date'];
                 $genre = $_POST['genre'];
                 $time = $_POST['time'];
                 $night = $_POST['night'];
 
-                // Bereid een SQL-statement voor
-                $stmt = $conn->prepare("INSERT INTO users_BAND (Genre, Time, Night) VALUES (?, ?, ?)");
-                $stmt->bind_param("sss", $genre, $time, $night);
+                $stmt = $conn->prepare("INSERT INTO users_BAND (Date ,Genre, Time, Night) VALUES (? ,?, ?, ?)");
+                $stmt->bind_param("ssss", $date, $genre, $time, $night);
 
-                // Voer het statement uit
                 if ($stmt->execute()) {
                     echo "<div class='message'>
                     <p>Reservation successfully!</p>
@@ -61,7 +60,6 @@ if (!isset($_SESSION['valid'])) {
                     echo "Error occurred: " . $stmt->error;
                 }
 
-                // Sluit het statement
                 $stmt->close();
             }
             ?>
@@ -78,24 +76,20 @@ if (!isset($_SESSION['valid'])) {
             <div class="top">
                 <div class="box">
                     <p>Hello <b><?php if ($res_Uname == "DelanoKano") {
-                        echo " <p>Admin</p> &nbsp" , $res_Uname;
-                    } else echo $res_Uname ?></b>, Welcome</p>
+                                    echo " <p>Admin</p> &nbsp", $res_Uname;
+                                } else echo $res_Uname ?></b>, Welcome</p>
                 </div>
 
                 <form method="post" action="">
                     <div class="box">
-                        <label for="genre-select">Select a Genre</label>
+                        <label for="night-select">Select the date: &nbsp</label>
                         <div class="select-wrapper">
-                            <select id="genre-select" name="genre">
-                                <option>Rock</option>
-                                <option>Hip-Hop</option>
-                                <option>R&B</option>
-                            </select>
+                            <input type="date" name="date">
                         </div>
                     </div>
 
                     <div class="box">
-                        <label for="time-select">Select a Time</label>
+                        <label for="time-select">Select a Time: &nbsp</label>
                         <div class="select-wrapper">
                             <select id="time-select" name="time">
                                 <option>16:00u</option>
@@ -104,21 +98,42 @@ if (!isset($_SESSION['valid'])) {
                         </div>
                     </div>
 
+
                     <div class="box">
-                        <label for="night-select">Select your Night</label>
+                        <label for="genre-select">Select a Genre: &nbsp</label>
                         <div class="select-wrapper">
+                            <select id="genre-select" name="genre">
+                                <option>Rock</option>
+                                <option>Hip-Hop</option>
+                                <option>R&B</option>
+                                <option>Soul</option>
+                                <option>Reggae</option>
+                                <option>Jazz</option>
+                                <option>Rap</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                    
+                        <label for="night-select">Select your Night: &nbsp</label>
+                        <div class="select-wrapper">        
                             <select id="night-select" name="night">
                                 <option>Sing for the night €80,00</option>
                                 <option>All in One €150,00</option>
                             </select>
+                                
                         </div>
+
+                        <img id="info" src="Picture/info.png" style="margin-left: 5em; width: 20px; cursor: pointer" >
+                        
                     </div>
 
                     <input type="submit" class="btn_submit" name="btn_submit" value="Submit" required>
                 </form>
     </main><br>
 
-
+    <script src="javascript/fullstack.js"></script>
+        
 </body>
-
 </html>
