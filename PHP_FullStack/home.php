@@ -1,9 +1,10 @@
 <?php
 session_start();
+ob_start();
 
 include("php/config.php");
 if (!isset($_SESSION['valid'])) {
-    header("Location: index.php");
+    header("Location: inlog.php");
 }
 ?>
 <!DOCTYPE html>
@@ -27,6 +28,10 @@ if (!isset($_SESSION['valid'])) {
 
             <?php
 
+            $reservationChecked = "<div class='message'>
+                    <p>Reservation successfully!</p>
+                    </div> <br>";
+
             $id = $_SESSION['id'];
             $query = mysqli_query($conn, "SELECT*FROM users WHERE Id=$id");
 
@@ -44,19 +49,24 @@ if (!isset($_SESSION['valid'])) {
 
             <?php
             if (isset($_POST['btn_submit'])) {
+                $bandname = $_POST['bandname'];
                 $date = $_POST['date'];
                 $genre = $_POST['genre'];
+                $genre2 = $_POST['genre2'];
+                $genre3= $_POST['genre3'];
                 $time = $_POST['time'];
                 $night = $_POST['night'];
 
-                $stmt = $conn->prepare("INSERT INTO users_BAND (Date ,Genre, Time, Night) VALUES (? ,?, ?, ?)");
-                $stmt->bind_param("ssss", $date, $genre, $time, $night);
 
+                $stmt = $conn->prepare("INSERT INTO users_BAND (Username, Bandname, Date ,Genre, Genre2, Genre3, Time, Night) VALUES (? ,? ,? ,? ,? ,?, ?, ?)");
+                $stmt->bind_param("ssssssss", $res_Uname, $bandname ,$date, $genre, $genre2, $genre3, $time, $night);
+                
+        
                 if ($stmt->execute()) {
-                    echo "<div class='message'>
-                    <p>Reservation successfully!</p>
-                    </div> <br>";
-                } else {
+                    header("location: complete.php"); 
+                    
+                }
+                 else {
                     echo "Error occurred: " . $stmt->error;
                 }
 
@@ -75,12 +85,20 @@ if (!isset($_SESSION['valid'])) {
         <div class="main-box top">
             <div class="top">
                 <div class="box">
-                    <p>Hello <b><?php if ($res_Uname == "DelanoKano") {
-                                    echo " <p>Admin</p> &nbsp", $res_Uname;
-                                } else echo $res_Uname ?></b>, Welcome</p>
+                    <p>Welcome, <b><?php if ($res_Uname == "DelanoKano") {
+                                        echo " <p>Admin</p> &nbsp", $res_Uname;
+                                    } else echo $res_Uname ?></b></p>
                 </div>
 
                 <form method="post" action="">
+                <div class="box">
+                        <label for="bandname">Bandname: &nbsp</label>
+                        <div class="select-wrapper">
+                            <input type="textbox" name="bandname">
+                        </div>
+                    </div>               
+
+
                     <div class="box">
                         <label for="night-select">Select the date: &nbsp</label>
                         <div class="select-wrapper">
@@ -102,31 +120,26 @@ if (!isset($_SESSION['valid'])) {
                     <div class="box">
                         <label for="genre-select">Select a Genre: &nbsp</label>
                         <div class="select-wrapper">
-                            <select id="genre-select" name="genre">
-                                <option>Rock</option>
-                                <option>Hip-Hop</option>
-                                <option>R&B</option>
-                                <option>Soul</option>
-                                <option>Reggae</option>
-                                <option>Jazz</option>
-                                <option>Rap</option>
-                            </select>
+                        <p><input type="checkbox" name="genre" value="Hip-hop/Rap"> &nbspHip-hop/Rap</p>
+                        <p><input type="checkbox" name="genre2" value="R&B"> &nbspR&B</p>
+                        <p><input type="checkbox" name="genre3" value="Rock"> &nbspRock</p>
+                                 
                         </div>
                     </div>
 
                     <div class="box">
-                    
+
                         <label for="night-select">Select your Night: &nbsp</label>
-                        <div class="select-wrapper">        
+                        <div class="select-wrapper">
                             <select id="night-select" name="night">
                                 <option>Sing for the night €80,00</option>
                                 <option>All in One €150,00</option>
                             </select>
-                                
+
                         </div>
 
-                        <img id="info" src="Picture/info.png" style="margin-left: 5em; width: 20px; cursor: pointer" >
-                        
+                        <img id="info" src="Picture/info.png" style="margin-left: 5em; width: 20px; cursor: pointer">
+                       
                     </div>
 
                     <input type="submit" class="btn_submit" name="btn_submit" value="Submit" required>
@@ -134,6 +147,7 @@ if (!isset($_SESSION['valid'])) {
     </main><br>
 
     <script src="javascript/fullstack.js"></script>
-        
+
 </body>
+
 </html>
